@@ -1,0 +1,118 @@
+---
+title: "Cloudy McSunny"
+params:
+  city: Boston
+  units:
+    input: select
+    choices:
+    - metric
+    - imperial
+    - standard
+    label: Units
+    value: metric
+resource_files:
+- .controls.json
+- .Renviron
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(lubridate)
+library(owmr)
+library(scales)
+library(stringr)
+```
+
+```{css, echo=FALSE}
+h1 {
+  color: #999;
+  font-size: 16px;
+  font-weight: normal;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+
+h3 {
+  color: #0099f9;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+```
+
+### `r params$city` - `r format(Sys.time(), "%A, %B %e at %R")`
+<!--
+## Current Weather for `r params$city`
+
+**Time:** `r format(Sys.time(), "%A, %B %e at %R")`
+-->
+
+```{r fetch-weather, include=FALSE}
+current <- get_current(params$city, units = params$units) %>% owmr_as_tibble
+forecast <- get_forecast(params$city, units = params$units) %>%
+  owmr_as_tibble %>%
+  select(dt_txt, humidity, temp_max, temp_min, weather_main) %>%
+  filter(hour(as.POSIXct(dt_txt)) == "15") %>%
+  rename(day = dt_txt, high = temp_max, low = temp_min, conditions = weather_main) %>%
+  mutate(
+    day = format(as.POSIXct(day), "%A"),
+    high = as.integer(high),
+    low = as.integer(low),
+    humidity = paste0(humidity, "%")
+  ) %>%
+  relocate(day, high, low, humidity, conditions)
+```
+
+```{r current-weather, echo=FALSE}
+current %>%
+  select(temp, humidity, temp_max, temp_min, weather_main) %>%
+  rename(high = temp_max, low = temp_min, conditions = weather_main) %>%
+  mutate(
+    temp = as.integer(temp),
+    high = as.integer(high),
+    low = as.integer(low),
+    humidity = paste0(humidity, "%")
+  ) %>%
+  relocate(temp, high, low, humidity, conditions) %>%
+  kbl %>%
+  kable_styling
+```
+
+<br>
+
+### Forecast
+
+```{r forecast, echo=FALSE}
+forecast %>%
+  kbl %>%
+  kable_paper("hover", full_width = T)
+```
+
+<br>
+
+
+```{r forecast-chart, echo = FALSE}
+forecast %>%
+  ggplot(mapping = aes(x = day, y = high, group = 1)) +
+  geom_line(color = "#0099f9", linewidth = 2) + 
+  geom_point(color = "#0099f9", size = 4) +
+  expand_limits(y = c(10, 40)) +
+  scale_y_continuous(
+    labels = unit_format(unit = "°")
+  ) +
+  labs(
+    title = '7 Day Highs',
+    subtitle = paste0("Units: ", str_to_title(params$units)),
+    caption = "Source: OpenWeather API"
+  ) + 
+  theme(
+    plot.title = element_text(color = "#0099f9", size = 16, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 13, face = "bold", hjust = 0.5),
+    plot.caption = element_text(face = "italic", hjust = 0)
+  )
+```
+
