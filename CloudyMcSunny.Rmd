@@ -27,12 +27,21 @@ library(stringr)
 
 ```{css, echo=FALSE}
 h1 {
-  color: #999;
-  font-size: 16px;
+  color: #777;
+  font-size: 1.7em !important;
   font-weight: normal;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
   text-align: center;
+}
+
+h2 {
+  color: #f99900;
+  font-size: 2em;
+  font-weight: bold;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  text-align: left;
 }
 
 h3 {
@@ -44,7 +53,9 @@ h3 {
 }
 ```
 
-### `r params$city` - `r format(Sys.time(), "%A, %B %e at %R")`
+## `r params$city`
+
+### `r format(Sys.time(), "%A, %B %e at %R")`
 <!--
 ## Current Weather for `r params$city`
 
