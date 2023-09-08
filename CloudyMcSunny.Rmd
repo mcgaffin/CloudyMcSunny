@@ -105,7 +105,7 @@ current %>%
 ```{r forecast, echo=FALSE}
 forecast %>%
   kbl %>%
-  kable_paper("hover", full_width = T)
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = T)
 ```
 
 <br>

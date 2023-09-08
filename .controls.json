@@ -3,7 +3,10 @@
     "generated": "2023-09-07T16:48:27Z",
     "parameters": [
         {
-    	    "city": "Boston",
+	    "label": "City",
+	    "name": "city",
+	    "type": "text",
+    	    "value": "Boston"
         },
         {
     	    "label": "Units",
