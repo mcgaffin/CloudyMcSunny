@@ -23,6 +23,16 @@ library(lubridate)
 library(owmr)
 library(scales)
 library(stringr)
+
+units_symbol <- function(units) {
+  switch(units,
+         "metric" = "\u00B0C",
+         "imperial" = "\u00B0F",
+         "standard" = "\u00B0K")
+}
+degrees <- function(deg) {
+  paste0(as.integer(deg), units_symbol(params$units))
+}
 ```
 
 ```{css, echo=FALSE}
@@ -56,11 +66,6 @@ h3 {
 ## `r params$city`
 
 ### `r format(Sys.time(), "%A, %B %e at %R")`
-<!--
-## Current Weather for `r params$city`
-
-**Time:** `r format(Sys.time(), "%A, %B %e at %R")`
--->
 
 ```{r fetch-weather, include=FALSE}
 current <- get_current(params$city, units = params$units) %>% owmr_as_tibble
@@ -83,9 +88,9 @@ current %>%
   select(temp, humidity, temp_max, temp_min, weather_main) %>%
   rename(high = temp_max, low = temp_min, conditions = weather_main) %>%
   mutate(
-    temp = as.integer(temp),
-    high = as.integer(high),
-    low = as.integer(low),
+    temp = degrees(temp),
+    high = degrees(high),
+    low = degrees(low),
     humidity = paste0(humidity, "%")
   ) %>%
   relocate(temp, high, low, humidity, conditions) %>%
@@ -113,11 +118,10 @@ forecast %>%
   geom_point(color = "#0099f9", size = 4) +
   expand_limits(y = c(10, 40)) +
   scale_y_continuous(
-    labels = unit_format(unit = "°")
+    labels = unit_format(unit = units_symbol(params$units), scale = 1),
   ) +
   labs(
-    title = '7 Day Highs',
-    subtitle = paste0("Units: ", str_to_title(params$units)),
+    title = '5-Day Highs',
     caption = "Source: OpenWeather API"
   ) + 
   theme(
@@ -126,4 +130,5 @@ forecast %>%
     plot.caption = element_text(face = "italic", hjust = 0)
   )
 ```
+
 
