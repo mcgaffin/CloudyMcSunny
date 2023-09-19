@@ -5,7 +5,7 @@
         {
 	    "label": "City",
 	    "name": "city",
-	    "type": "text",
+	    "type": "textinput",
     	    "value": "Boston"
         },
         {

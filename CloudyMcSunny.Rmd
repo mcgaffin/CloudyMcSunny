@@ -33,6 +33,10 @@ units_symbol <- function(units) {
 degrees <- function(deg) {
   paste0(as.integer(deg), units_symbol(params$units))
 }
+
+dow <- function(date) {
+  format(as.POSIXct(date), "%A")
+}
 ```
 
 ```{css, echo=FALSE}
@@ -75,7 +79,6 @@ forecast <- get_forecast(params$city, units = params$units) %>%
   filter(hour(as.POSIXct(dt_txt)) == "15") %>%
   rename(day = dt_txt, high = temp_max, low = temp_min, conditions = weather_main) %>%
   mutate(
-    day = format(as.POSIXct(day), "%A"),
     high = as.integer(high),
     low = as.integer(low),
     humidity = paste0(humidity, "%")
@@ -104,6 +107,7 @@ current %>%
 
 ```{r forecast, echo=FALSE}
 forecast %>%
+  mutate(day = dow(day)) %>%
   kbl %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = T)
 ```
@@ -119,6 +123,9 @@ forecast %>%
   expand_limits(y = c(10, 40)) +
   scale_y_continuous(
     labels = unit_format(unit = units_symbol(params$units), scale = 1),
+  ) +
+  scale_x_discrete(
+    labels = dow
   ) +
   labs(
     title = '5-Day Highs',
