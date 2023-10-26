@@ -3,16 +3,16 @@
     "generated": "2023-09-07T16:48:27Z",
     "parameters": [
         {
-	    "label": "City",
-	    "name": "city",
-	    "type": "textinput",
-    	    "value": "Boston"
+	  "label": "City",
+	  "name": "city",
+	  "type": "textinput",
+    	  "value": "Boston"
         },
         {
-    	    "label": "Units",
+    	  "label": "Units",
           "name": "units",
           "type": "select",
-    	    "choices": ["metric", "imperial", "standard"],
+    	  "choices": ["metric", "imperial", "standard"],
           "value": "metric"
         }
     ]

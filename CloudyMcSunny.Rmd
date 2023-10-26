@@ -69,7 +69,7 @@ h3 {
 
 ## `r params$city`
 
-### `r format(Sys.time(), "%A, %B %e at %R")`
+### `r format(Sys.time(), "%A, %B %e at %R", tz = "America/New_York")`
 
 ```{r fetch-weather, include=FALSE}
 current <- get_current(params$city, units = params$units) %>% owmr_as_tibble
