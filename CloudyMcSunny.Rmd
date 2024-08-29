@@ -3,7 +3,7 @@ title: "Cloudy McSunny"
 params:
   city: Boston
   units:
-    input: select
+    input: radio
     choices:
     - metric
     - imperial

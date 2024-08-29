@@ -11,7 +11,7 @@
         {
     	  "label": "Units",
           "name": "units",
-          "type": "select",
+          "type": "radioinput",
     	  "choices": ["metric", "imperial", "standard"],
           "value": "metric"
         }
