@@ -75,15 +75,15 @@ h3 {
 current <- get_current(params$city, units = params$units) %>% owmr_as_tibble
 forecast <- get_forecast(params$city, units = params$units) %>%
   owmr_as_tibble %>%
-  select(dt_txt, humidity, temp_max, temp_min, weather_main) %>%
+  select(dt_txt, humidity, temp_max, temp_min, weather_main, weather_icon) %>%
   filter(hour(as.POSIXct(dt_txt)) == "15") %>%
-  rename(day = dt_txt, high = temp_max, low = temp_min, conditions = weather_main) %>%
+  rename(day = dt_txt, high = temp_max, low = temp_min, conditions = weather_main, icon = weather_icon) %>%
   mutate(
     high = as.integer(high),
     low = as.integer(low),
     humidity = paste0(humidity, "%")
   ) %>%
-  relocate(day, high, low, humidity, conditions)
+  relocate(icon, day, high, low, humidity, conditions)
 ```
 
 ```{r current-weather, echo=FALSE}
