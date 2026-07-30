@@ -12,3 +12,6 @@ This is a demonstration of Parameterized RMarkdown for [Posit Connect](https://p
   - **Value:** `<your OWM API key>`
 5. Save changes
 6. Close Settings and click **Refresh**.
+
+## screenshot
+![Cloudy McSunny Demo](./cloudy-mcsunny-demo.png)
